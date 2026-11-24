@@ -1,0 +1,24 @@
+{
+  "name": "activity7-backend",
+  "version": "1.0.0",
+  "description": "Library Service Requests REST API - ICT251 Mulungushi University",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "init-db": "node scripts/init-db.js"
+  },
+  "keywords": [
+    "express",
+    "postgresql",
+    "ict251",
+    "mulungushi"
+  ],
+  "author": "ISAAC MITI",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "pg": "^8.13.1"
+  }
+}

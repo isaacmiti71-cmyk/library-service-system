@@ -1,0 +1,251 @@
+{
+  "info": {
+    "name": "ICT251 Activity 7 - Library Service Requests API",
+    "description": "Comprehensive test collection for Mulungushi University ICT251 Library Service Requests REST API.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "createdId",
+      "value": "1",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. GET API Guide (Marker Documentation)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/",
+          "host": ["{{baseUrl}}"],
+          "path": [""]
+        }
+      }
+    },
+    {
+      "name": "2. GET Health Check (DB Test)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/health",
+          "host": ["{{baseUrl}}"],
+          "path": ["health"]
+        }
+      }
+    },
+    {
+      "name": "3. GET All Records",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/records",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "records"]
+        }
+      }
+    },
+    {
+      "name": "4. POST Valid Record (Create)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "var jsonData = pm.response.json();",
+              "if (jsonData.id) {",
+              "    pm.collectionVariables.set('createdId', jsonData.id);",
+              "}"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Find a database textbook\",\n  \"category\": \"Book search\",\n  \"description\": \"I need help locating Fundamentals of Database Systems 7th Edition by Elmasri.\",\n  \"status\": \"Pending\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/records",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "records"]
+        }
+      }
+    },
+    {
+      "name": "5. GET One Record by ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/records/{{createdId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "records", "{{createdId}}"]
+        }
+      }
+    },
+    {
+      "name": "6. PUT Update Record",
+      "request": {
+        "method": "PUT",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Locate Database Systems 7th Edition (Updated)\",\n  \"category\": \"Book search\",\n  \"description\": \"Librarian located copy on Shelf 4B; pending collection by student.\",\n  \"status\": \"In progress\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/records/{{createdId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "records", "{{createdId}}"]
+        }
+      }
+    },
+    {
+      "name": "7. DELETE Record",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/records/{{createdId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "records", "{{createdId}}"]
+        }
+      }
+    },
+    {
+      "name": "8. GET Deleted Record (Expect 404)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/records/{{createdId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "records", "{{createdId}}"]
+        }
+      }
+    },
+    {
+      "name": "9. POST Invalid (Missing Title) -> Expect 400",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"category\": \"Borrowing\",\n  \"description\": \"Missing title attribute test\",\n  \"status\": \"Pending\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/records",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "records"]
+        }
+      }
+    },
+    {
+      "name": "10. POST Invalid (Bad Status) -> Expect 400",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Invalid Status Test\",\n  \"category\": \"Borrowing\",\n  \"description\": \"Testing invalid enum value.\",\n  \"status\": \"Rejected\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/records",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "records"]
+        }
+      }
+    },
+    {
+      "name": "11. GET Invalid ID (abc) -> Expect 400",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/records/abc",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "records", "abc"]
+        }
+      }
+    },
+    {
+      "name": "12. POST Malformed JSON -> Expect 400",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Malformed JSON Test\",\n  \"category\": \"Book search\""
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/records",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "records"]
+        }
+      }
+    },
+    {
+      "name": "13. GET Non-Existent Positive ID -> Expect 404",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/records/999999",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "records", "999999"]
+        }
+      }
+    },
+    {
+      "name": "14. PUT Non-Existent Positive ID -> Expect 404",
+      "request": {
+        "method": "PUT",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Valid Title Here\",\n  \"category\": \"Borrowing\",\n  \"description\": \"Valid description exceeding five characters.\",\n  \"status\": \"Pending\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/records/999999",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "records", "999999"]
+        }
+      }
+    },
+    {
+      "name": "15. DELETE Non-Existent Positive ID -> Expect 404",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/records/999999",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "records", "999999"]
+        }
+      }
+    }
+  ]
+}
